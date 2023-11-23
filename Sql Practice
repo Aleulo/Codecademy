@@ -1,0 +1,96 @@
+ /* Start by getting a feel for the hacker_news table! 
+ 
+ select title, score, timestamp from hacker_news
+ order by score desc
+ limit 5 ;
+
+ Recent studies have found that online forums tend to be dominated by a small percentage of their users (1-9-90 Rule).
+
+Is this true of Hacker News?
+
+Is a small percentage of Hacker News submitters taking the majority of the points?
+ select sum(score) from hacker_news;
+
+Next, we need to pinpoint the users who have accumulated a lot of points across their stories.
+Find the individual users who have gotten combined scores of more than 200, and their combined scores.
+select user, sum(score) from hacker_news
+group by 1
+having sum(score) > 200;
+
+Then, we want to add these users’ scores together and divide by the total to get the percentage.
+Add their scores together and divide it by the total sum. Like so:
+
+Select user, score from hacker_news
+where score > 200;
+
+SELECT (517 + 309 + 304 + 282) / 6366.0;
+
+select user, count(*) from hacker_news 
+group by 1
+having url='https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+
+Hacker News stories are essentially links that take users to other websites.
+Which of these sites feed Hacker News the most:
+GitHub, Medium, or New York Times?
+First, we want to categorize each story based on their source.
+We can do this using a CASE statement:
+
+select user, url,
+case 
+  When url like '%github.com%' then 'GitHub'
+  when url like '%medium.com%' then 'Medium'
+  when url like '%nytimes.com%' then 'New York Times'
+  Else 'Other'
+End as 'Source'
+From hacker_news
+where url is not null;
+
+
+select count(*),
+case 
+  When url like '%github.com%' then 'GitHub'
+  when url like '%medium.com%' then 'Medium'
+  when url like '%nytimes.com%' then 'New York Times'
+  Else 'Other'
+End as 'Source'
+From hacker_news
+group by Source;
+
+
+-- Which sites feed Hacker News?
+
+SELECT CASE
+   WHEN url LIKE '%github.com%' THEN 'GitHub'
+   WHEN url LIKE '%medium.com%' THEN 'Medium'
+   WHEN url LIKE '%nytimes.com%' THEN 'New York Times'
+   ELSE 'Other'
+  END AS 'Source',
+  COUNT(*)
+FROM hacker_news
+GROUP BY 1;
+
+
+Every submitter wants their story to get a high score so that the story makes it to the front page, but…
+
+What’s the best time of the day to post a story on Hacker News?
+
+Before we get started, let’s run this query and take a look at the timestamp column:
+
+select timestamp 
+from hacker_news
+limit 10;
+
+
+SELECT timestamp,
+   strftime('%H', timestamp)
+FROM hacker_news
+GROUP BY 2
+LIMIT 20;
+
+SELECT strftime('%H', timestamp) AS 'Hour',
+  ROUND(AVG(score), 1) AS 'Average Score',
+  COUNT(*) AS 'Number of Stories'
+FROM hacker_news
+GROUP BY 1
+;
+*/
