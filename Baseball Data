@@ -1,0 +1,5 @@
+select avg(weight),teams.name  from people join batting on people.playerid = batting.playerid join teams on batting.team_id = teams.id group by teams.name order by avg(weight) desc;
+
+select max(salaries.salary) , teams.name from salaries join teams on teams.id = salaries.team_id where salaries.yearid = 1999 group by teams.name;
+
+select round(max(salaries.salary)/teams.w) as sal_div_win , teams.name, salaries.yearid from salaries left join teams on teams.id = salaries.team_id and teams.yearid = salaries.yearid where salaries.yearid = 1999 group by teams.name, teams.w, salaries.yearid order by SUM(salary)/teams.w asc;
